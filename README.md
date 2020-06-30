@@ -32,30 +32,36 @@ Para instalar el vCenter (requiere una cuenta en VMWare o solicitar un trial)
 - [ ] Detener o apagar la máquina de bootstrap y eliminar o comentar entrada en el balanceador de carga
 - [ ] Aprobar nodos como parte del clúster
 
+```
 openshift-install wait-for bootstrap-complete --log-level=debug
+```
 
 El resultado se vería así:
+```
 oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve
-
+```
 
 [ ] Desplegar nodos
+```
 oc get nodes
-
+```
 
 [ ] Configurar el almacenamiento para el registro de imágenes. Se usa emptyDir solo en ambientes no productivos
 
 Opción 1: Empty Dir (solo para ambientes poc)
+```
 oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
-
+```
 
 Opción 2: Registro con almacenamiento compartido
+```
 kubectl patch storageclass thin -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 oc get pvc -n openshift-image-registry
 oc delete pvc image-registry-storage -n openshift-image-registry
 oc create -f pv-registry.yaml
 oc create -f pvc-registry.yaml
-
 oc edit configs.imageregistry.operator.openshift.io
+```
 #############################################
 apiVersion: v1
 kind: PersistentVolume
