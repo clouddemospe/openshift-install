@@ -24,9 +24,8 @@ Para instalar el vCenter (requiere una cuenta en VMWare o solicitar un trial)
 - [ ] Configurar un servidor DHCP con ips a hosts estáticas y MAC Address permitidas por OCP 4.x
 - [ ] Configurar un servidor HTTP con un virtual host al dominio solicitado
 - [ ] Configurar un balanceador de carga y considerar el siguiente ejemplo
-
-**Nota(s):**
-- Se pueden configurar todos los servicios y el balanceador de carga en la misma máquina virtual.
+   **Nota(s):**
+     Se pueden configurar todos los servicios y el balanceador de carga en la misma máquina virtual.
 
 - [ ] Configuración templates y máquinas virtuales
 - [ ] Configuración de *bootstrap*
