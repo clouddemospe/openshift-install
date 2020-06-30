@@ -7,31 +7,31 @@ Trucos & Tips de instalación de Red Hat OpenShift v4.x en VMWare
 Para configurar el ip público seguir estos pasos
 https://cloud.ibm.com/docs/infrastructure/virtualization?topic=Virtualization-enabling-public-access-to-vmware-esxi
 
-[ ] Configurar una nueva nic de virtual kernel con la ip pública asignada
-[ ] Crear un portgroup para la nueva nic de virtual kernel y uno para red pública, ambos atachados al vSwitch1
-[ ] Crear un nuevo virtual switch y atachar el interfaz 1, esta tiene la salida a Internet o asegurarse según lo indica el portal de IBM Cloud el interfaz público. En realidad deberían haber dos virtual switches vSwitch0 y vSwitch1. En el 0 va el VirtualKernel local y en el 1 va el interfaz público y el VirtualKernel público.
-[ ] Ingresar vía consola ssh al esxi y configurar según indica el enlace
-[ ] Deshabilitar el acceso vía ssh y a la consola web vía interfaz público
+- [ ] Configurar una nueva nic de virtual kernel con la ip pública asignada
+- [ ] Crear un portgroup para la nueva nic de virtual kernel y uno para red pública, ambos atachados al vSwitch1
+- [ ] Crear un nuevo virtual switch y atachar el interfaz 1, esta tiene la salida a Internet o asegurarse según lo indica el portal de IBM Cloud el interfaz público. En realidad deberían haber dos virtual switches vSwitch0 y vSwitch1. En el 0 va el VirtualKernel local y en el 1 va el interfaz público y el VirtualKernel público.
+- [ ] Ingresar vía consola ssh al esxi y configurar según indica el enlace
+- [ ] Deshabilitar el acceso vía ssh y a la consola web vía interfaz público
 
 Para instalar el vCenter (requiere una cuenta en VMWare o solicitar un trial)
-[ ] Descargar de la página de VMWare el iso del appliance de vCenter
-[ ] En una máquina linux o windows con acceso al ESXi montar el iso
-[ ] Si es linux instalar interfaz gráfica (Gnome y tools) y luego ir la carpeta lin64, desplegar el instalador
-[ ] Configurar la conexión al ESXi e instalar el appliance
+- [ ] Descargar de la página de VMWare el iso del appliance de vCenter
+- [ ] En una máquina linux o windows con acceso al ESXi montar el iso
+- [ ] Si es linux instalar interfaz gráfica (Gnome y tools) y luego ir la carpeta lin64, desplegar el instalador
+- [ ] Configurar la conexión al ESXi e instalar el appliance
 
 ### Configuración pre-requisitos
-[ ] Configurar un servidor DNS y considerar el siguiente ejemplo
-[ ] Configurar un servidor DHCP con ips a hosts estáticas y MAC Address permitidas por OCP 4.x
-[ ] Configurar un servidor HTTP con un virtual host al dominio solicitado
-[ ] Configurar un balanceador de carga y considerar el siguiente ejemplo
+- [ ] Configurar un servidor DNS y considerar el siguiente ejemplo
+- [ ] Configurar un servidor DHCP con ips a hosts estáticas y MAC Address permitidas por OCP 4.x
+- [ ] Configurar un servidor HTTP con un virtual host al dominio solicitado
+- [ ] Configurar un balanceador de carga y considerar el siguiente ejemplo
 
 **Nota(s):**
 - Se pueden configurar todos los servicios y el balanceador de carga en la misma máquina virtual.
 
-[ ] Configuración templates y máquinas virtuales
-[ ] Configuración de *bootstrap*
-[ ] Detener o apagar la máquina de bootstrap y eliminar o comentar entrada en el balanceador de carga
-[ ] Aprobar nodos como parte del clúster
+- [ ] Configuración templates y máquinas virtuales
+- [ ] Configuración de *bootstrap*
+- [ ] Detener o apagar la máquina de bootstrap y eliminar o comentar entrada en el balanceador de carga
+- [ ] Aprobar nodos como parte del clúster
 
 openshift-install wait-for bootstrap-complete --log-level=debug
 
