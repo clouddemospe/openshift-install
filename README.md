@@ -25,7 +25,7 @@ Para instalar el vCenter (requiere una cuenta en VMWare o solicitar un trial)
 - [ ] Configurar un servidor HTTP con un virtual host al dominio solicitado
 - [ ] Configurar un balanceador de carga y considerar el siguiente ejemplo
    **Nota(s):**
-     Se pueden configurar todos los servicios y el balanceador de carga en la misma máquina virtual.
+     > Se pueden configurar todos los servicios y el balanceador de carga en la misma máquina virtual.
 
 ## Despliegue del cluster
 - [ ] Configuración templates y máquinas virtuales
@@ -216,49 +216,7 @@ spec:
     volumePath: "[datastore1] volumes/block01.vmdk"
     fsType: ext4
 
-######################################################
-Para añadir un entidad de autoridad de certificación en los builds de OCP, solo se puede realizar desde el CLI en maquina local con docker se añade en (rootCA.pem), /etc/docker/certs.d/quay.ocp4.demo.com/ca.crt
-
-oc create configmap registry-cas -n openshift-config \
---from-file=quay.ocp4.demo.com=/etc/docker/certs.d/quay.ocp4.demo.com/ca.crt
-From <https://docs.openshift.com/container-platform/4.2/builds/setting-up-trusted-ca.html> 
-
-oc patch image.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-cas"}}}' --type=merge
-From <https://docs.openshift.com/container-platform/4.2/builds/setting-up-trusted-ca.html> 
-
-##################################################################################################
-
-Para la configuración de Cloud Pak for Applications:
-https://github.com/orgs/cp4app/teams/devjourney/repositories
-
-Please see https://ibm-cp-applications.apps.ocp4.demo.com to get started and learn more about IBM Cloud Pak for Applications.
-
-The Tekton Dashboard is available at: https://tekton-dashboard-tekton-pipelines.apps.ocp4.demo.com.
-The IBM Transformation Advisor UI is available at: https://ta-apps.apps.ocp4.demo.com.
-The IBM Application Navigator UI is available at: https://kappnav-ui-service-kappnav.apps.ocp4.demo.com.
-
-Para instalar JQ: https://snapcraft.io/install/jq/centos
-
- github:
-    url: "https://github.com"
-    organization: "cp4app"
-    teams: [devjourney]
-    token: "a149cff37424038ef2227b4cc8e5ecab3bf4b48b"
-
-KEY Sysdig 
-f362a496-d5aa-41d0-a2c6-5631f733959f
-
-From <https://us-south.monitoring.cloud.ibm.com/#/wizard/agent/k8s> 
-
-Github Enterprise
-5695655339b84ed156d702ee021fbbbcd79da428
-
-Dacadoo
-5ebd0f63ea668b5f08777360
-oc create configmap dacadoo-config --from-literal=DACADOO_URL=https://models.dacadoo.com/score/3 --from-literal=DACADOO_APIKEY=z0kz2z95ZtDxMIVlNZthqdQSF7SO9JXx0XU7MN6v
-
-#########################################################
-
+## Configuración de Logging
 Configurar logging: https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html
 	1. Crear el namespace openshift-logging
 	2. Crear el PV y el PVC de mínimo 200 GB
