@@ -103,6 +103,19 @@ storage:
 ```
 oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
 ```
+Para loguearse en el registry de OCP v4.x:
+```
+oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+oc login https://api.ocp4.demo.com:6443 -u admin -p db2admin#ICP
+HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+podman login -u $(oc whoami) -p $(oc whoami -t) --tls-verify=false $HOST
+```
+Si usa kubeadmin:
+```
+HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+podman login -u kubeadmin -p $(oc whoami -t) --tls-verify=false $HOST
+```
+
 ## Finalizar la instalación del clúster
 - [ ] Ejecutar el comando de verificación
 ```
@@ -124,50 +137,23 @@ Comprobar el acceso del clúster via la consola
 ```
  oc login https://api.ocp4.demo.com:6443 -u kubeadmin -p ***********************
 ```
-######################################################################################
-Para borrar proyectos en estado stuck:
-https://stackoverflow.com/questions/58638297/project-deletion-struck-in-terminating
-
- 1035  oc get namespace user0 -o json > tmp_ns.json
- 1036  vim tmp_ns.json 
- 1037  oc proxy &
- 1038  curl -k -H "Content-Type: application/json" -X PUT --data-binary @tmp_ns.json http://127.0.0.1:8001/api/v1/namespaces/user0/finalize
- 1039  oc get ns user0
- 1040  oc get projects |grep user
- 1050  jobs
- 1051  kill %1
-######################################################################################
-
-	11) Configurar Identity Providers
-
-Opción 1: desde línea de comandos
+## Configurar Identity Providers
+### Via archivo
+- [ ] Opción 1: desde línea de comandos
  oc create secret generic htpass-secret --from-file=htpasswd=/etc/httpd/conf/users.htpasswd -n openshift-config
  oc apply -f htpasswd_provider.yaml
 
-Opción 2: (Preferida) desde el UI o consola de Openshift
+- [ ] Opción 2: (Preferida) desde el UI o consola de Openshift
 
-12 ) Configurar el registry
-Para loguearse en el registry de OCP v4.2:
-$ oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
-$ oc login https://api.ocp4.demo.com:6443 -u admin -p db2admin#ICP
-$ HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
-$ podman login -u $(oc whoami) -p $(oc whoami -t) --tls-verify=false $HOST
+### Via LDAP
+- [ ] Configurar LDAP auth con JumpCloud
 
-Si usa kubeadmin:
-$ HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
-$ podman login -u kubeadmin -p $(oc whoami -t) --tls-verify=false $HOST
-
-##################################################################################################
-Image Registry Mirror:
-
-
-##################################################################################
-Configurar LDAP auth: 
 ldap://host:port/basedn?attribute?scope?filter
 From <https://docs.openshift.com/container-platform/4.2/authentication/identity_providers/configuring-ldap-identity-provider.html> 
 https://support.jumpcloud.com/support/s/article/using-ldapsearch-with-jumpcloud1
 https://medium.com/@yildirimabdrhm/openshift-ldap-integration-7137088c990d
 
+```
 apiVersion: config.openshift.io/v1
 kind: OAuth
 metadata:
@@ -200,11 +186,13 @@ ldap://ldap.jumpcloud.com:389/o=5e18b5458d06685de549871c,dc=jumpcloud,dc=com?uid
 mappingMethod: claim
 name: ldap-provider
 type: LDAP
-
-
+```
 Asignar permisos de administrador del cluster al nuevo usuario:
+```
 oc create clusterrolebinding ldap-admin --clusterrole=cluster-admin --user=admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
+
+```
 
 ####################################################
 Para crear volumenes con VMWare:
