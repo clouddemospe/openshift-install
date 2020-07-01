@@ -38,17 +38,16 @@ openshift-install wait-for bootstrap-complete --log-level=debug
 ```
 oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve
 ```
-[ ] Revisar nodos del cluster
+- [ ] Revisar nodos del cluster
 ```
 oc get nodes
 ```
 ## Configurar el registro de imágenes.
-Opción 1: Empty Dir (solo para ambientes poc)
+- [ ] Opción 1: Configurar con EmptyDir (solo para ambientes poc)
 ```
 oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
 ```
-
-Opción 2: Registro con almacenamiento compartido
+- [ ] Opción 2: Registro con almacenamiento compartido
 ```
 kubectl patch storageclass thin -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 oc get pvc -n openshift-image-registry
@@ -57,7 +56,7 @@ oc create -f pv-registry.yaml
 oc create -f pvc-registry.yaml
 oc edit configs.imageregistry.operator.openshift.io
 ```
-Archivo de configuración de volumen
+- Archivo de configuración de volumen
 ```
 apiVersion: v1
 kind: PersistentVolume
@@ -73,7 +72,7 @@ spec:
     server: <IP>
   persistentVolumeReclaimPolicy: Recycle
 ```
-Archivo de configuración de reclamación de volumen
+- Archivo de configuración de reclamación de volumen
 ```
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -89,7 +88,7 @@ spec:
     requests:
       storage: 100Gi
 ```
-Modificar el operador del registy. Durante su modificación existen dos entradas "storage", modifique ambas entradas como se muestra a continuación:
+- [ ] Modificar el operador del registy. Durante su modificación existen dos entradas "storage", modifique ambas entradas como se muestra a continuación:
 ```
 storage:
     pvc:
@@ -100,14 +99,17 @@ storage:
       claim: image-registry-storage
   storageManaged: false
 ```
-Configurar la ruta de acceso al registro de imágenes
+- [ ] Configurar la ruta de acceso al registro de imágenes
 ```
 oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
 ```
-	10) Finalizar la instalación del clúster
+## Finalizar la instalación del clúster
+- [ ] Ejecutar el comando de verificación
+```
 openshift-install wait-for install-complete --log-level=debug
-
-
+```
+Se obtendrá el siguiente resultado
+```
 DEBUG Cluster is initialized                       
 INFO Waiting up to 10m0s for the openshift-console route to be created... 
 DEBUG Route found in openshift-console namespace: console 
@@ -116,11 +118,12 @@ DEBUG OpenShift console route is created
 INFO Install complete!                            
 INFO To access the cluster as the system:admin user when using 'oc', run 'export KUBECONFIG=/root/icpa4/auth/kubeconfig' 
 INFO Access the OpenShift web-console here: https://console-openshift-console.apps.ocp4.demo.com 
-INFO Login to the console with user: kubeadmin, password: Q4IyG-94ZL6-MzWIM-9PfVZ
-
-
- oc login https://api.ocp4.demo.com:6443 -u kubeadmin -p Q4IyG-94ZL6-MzWIM-9PfVZ
-
+INFO Login to the console with user: kubeadmin, password: ***********************
+```
+Comprobar el acceso del clúster via la consola
+```
+ oc login https://api.ocp4.demo.com:6443 -u kubeadmin -p ***********************
+```
 ######################################################################################
 Para borrar proyectos en estado stuck:
 https://stackoverflow.com/questions/58638297/project-deletion-struck-in-terminating
