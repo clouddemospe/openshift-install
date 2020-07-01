@@ -19,7 +19,7 @@ Para instalar el vCenter (requiere una cuenta en VMWare o solicitar un trial)
 - [ ] Si es linux instalar interfaz gráfica (Gnome y tools) y luego ir la carpeta lin64, desplegar el instalador
 - [ ] Configurar la conexión al ESXi e instalar el appliance
 
-### Configuración pre-requisitos
+## Configuración pre-requisitos
 - [ ] Configurar un servidor DNS y considerar el siguiente ejemplo
 - [ ] Configurar un servidor DHCP con ips a hosts estáticas y MAC Address permitidas por OCP 4.x
 - [ ] Configurar un servidor HTTP con un virtual host al dominio solicitado
@@ -27,27 +27,22 @@ Para instalar el vCenter (requiere una cuenta en VMWare o solicitar un trial)
    **Nota(s):**
      Se pueden configurar todos los servicios y el balanceador de carga en la misma máquina virtual.
 
+## Despliegue del cluster
 - [ ] Configuración templates y máquinas virtuales
 - [ ] Configuración de *bootstrap*
-- [ ] Detener o apagar la máquina de bootstrap y eliminar o comentar entrada en el balanceador de carga
-- [ ] Aprobar nodos como parte del clúster
-
 ```
 openshift-install wait-for bootstrap-complete --log-level=debug
 ```
-
-El resultado se vería así:
+- [ ] Detener o apagar la máquina de bootstrap y eliminar o comentar entrada en el balanceador de carga
+- [ ] Aprobar nodos como parte del clúster
 ```
 oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve
 ```
-
-[ ] Desplegar nodos
+[ ] Revisar nodos del cluster
 ```
 oc get nodes
 ```
-
-[ ] Configurar el almacenamiento para el registro de imágenes. Se usa emptyDir solo en ambientes no productivos
-
+## Configurar el registro de imágenes.
 Opción 1: Empty Dir (solo para ambientes poc)
 ```
 oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
@@ -62,7 +57,8 @@ oc create -f pv-registry.yaml
 oc create -f pvc-registry.yaml
 oc edit configs.imageregistry.operator.openshift.io
 ```
-#############################################
+Archivo de configuración de volumen
+```
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -76,9 +72,9 @@ spec:
     path: /mnt/data
     server: <IP>
   persistentVolumeReclaimPolicy: Recycle
-#############################################
-
-#############################################
+```
+Archivo de configuración de reclamación de volumen
+```
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -92,10 +88,9 @@ spec:
   resources:
     requests:
       storage: 100Gi
-#############################################
-
+```
 Modificar el operador del registy. Durante su modificación existen dos entradas "storage", modifique ambas entradas como se muestra a continuación:
-#############################################
+```
 storage:
     pvc:
       claim: image-registry-storage
@@ -104,10 +99,11 @@ storage:
     pvc:
       claim: image-registry-storage
   storageManaged: false
-#############################################
-
+```
+Configurar la ruta de acceso al registro de imágenes
+```
 oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
-
+```
 	10) Finalizar la instalación del clúster
 openshift-install wait-for install-complete --log-level=debug
 
