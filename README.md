@@ -1,4 +1,4 @@
-# openshift-install
+# RH OCP Lessons Learned & Guide
 Trucos & Tips de instalación de Red Hat OpenShift v4.x en VMWare
 
 
