@@ -218,7 +218,7 @@ spec:
 ```
 
 ## Configuración de Logging
-Configurar logging: https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html
+- Configurar logging: https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html
 	1. Crear el namespace openshift-logging
 	2. Crear el PV y el PVC de mínimo 200 GB
 	3. Instalar el Operador de Cluster Logging
@@ -227,17 +227,12 @@ Configurar logging: https://docs.openshift.com/container-platform/4.3/logging/cl
 	6. Para Demos usar NFS para producción usar Bloque, para demo usar 
 	ZeroRedundancy
 	
-	From <https://docs.openshift.com/container-platform/4.1/logging/config/efk-logging-elasticsearch.html> 
-	Y ambientes no productivos, para ambientes productivos usar mínimo 2 réplicas, cada réplica utiliza 16 GB RAM
+From <https://docs.openshift.com/container-platform/4.1/logging/config/efk-logging-elasticsearch.html> 
+Para ambientes productivos usar mínimo 2 réplicas, considere que cada réplica utiliza 16 GB RAM
 
-
-
-Actions > Edit Secret
-
-
-
-Enabling Elasticsearch to Mount the Directory
-The installation of Elasticsearch will fail because there is currently no way to grant the Elasticsearch service account permission to mount that directory during installation. After installation is complete, do the following steps to enable Elasticsearch to mount the directory:
+- Actions > Edit Secret
+- Enabling Elasticsearch to Mount the Directory
+- The installation of Elasticsearch will fail because there is currently no way to grant the Elasticsearch service account permission to mount that directory during   installation. After installation is complete, do the following steps to enable Elasticsearch to mount the directory:
 ```
 oc project openshift-logging
 oc adm policy add-scc-to-user hostmount-anyuid \
@@ -248,7 +243,7 @@ oc rollout status -w $( oc get -n openshift-logging dc -l component=es -o name )
 ```
 From <https://github.com/ViaQ/Main/blob/master/README-install.md#enabling-elasticsearch-to-mount-the-directory> 
 
-Configurar Curator:
+- Configurar Curator:
 ```
 oc edit configmap curator -n openshift-logging
   config.yaml: |
