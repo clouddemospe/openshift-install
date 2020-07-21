@@ -193,13 +193,14 @@ oc adm policy add-cluster-role-to-user cluster-admin admin
 
 ```
 
-####################################################
-Para crear volumenes con VMWare:
-Loguearse al VMWare ESXi vía root
-Ejecutar el comando
+### Para crear volumenes con VMWare:
+- Loguearse al VMWare ESXi vía root
+- Ejecutar el comando
+```
 vmkfstools -c 100G /vmfs/volumes/datastore1/volumes/block01.vmdk
-
-Luego crear un volumen
+```
+- Luego crear un volumen
+```
 [root@bastion quay-operator]# vim pv-block-quay.yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -214,6 +215,7 @@ spec:
   vsphereVolume:
     volumePath: "[datastore1] volumes/block01.vmdk"
     fsType: ext4
+```
 
 ## Configuración de Logging
 Configurar logging: https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html
@@ -236,16 +238,18 @@ Actions > Edit Secret
 
 Enabling Elasticsearch to Mount the Directory
 The installation of Elasticsearch will fail because there is currently no way to grant the Elasticsearch service account permission to mount that directory during installation. After installation is complete, do the following steps to enable Elasticsearch to mount the directory:
-    # oc project openshift-logging
-    # oc adm policy add-scc-to-user hostmount-anyuid \
-      system:serviceaccount:openshift-logging:aggregated-logging-elasticsearch
-# oc rollout cancel $( oc get -n openshift-logging dc -l component=es -o name )
-    # oc rollout latest $( oc get -n openshift-logging dc -l component=es -o name )
-    # oc rollout status -w $( oc get -n openshift-logging dc -l component=es -o name )
-
+```
+oc project openshift-logging
+oc adm policy add-scc-to-user hostmount-anyuid \
+   system:serviceaccount:openshift-logging:aggregated-logging-elasticsearch
+oc rollout cancel $( oc get -n openshift-logging dc -l component=es -o name )
+oc rollout latest $( oc get -n openshift-logging dc -l component=es -o name )
+oc rollout status -w $( oc get -n openshift-logging dc -l component=es -o name )
+```
 From <https://github.com/ViaQ/Main/blob/master/README-install.md#enabling-elasticsearch-to-mount-the-directory> 
 
 Configurar Curator:
+```
 oc edit configmap curator -n openshift-logging
   config.yaml: |
     # Logging example curator config file
@@ -259,8 +263,5 @@ oc edit configmap curator -n openshift-logging
     .operations:
       delete:
         weeks: 1
-
-https://docs.openshift.com/container-platform/4.4/logging/config/cluster-logging-curator.html
-
-########################################################
-Tokens para GitHubE IBM: d8f084a0ae747d4b893c6d663abd84388f4bfc4d
+```
+From <https://docs.openshift.com/container-platform/4.4/logging/config/cluster-logging-curator.html>
